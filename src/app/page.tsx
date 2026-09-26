@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { businesses, products } from "@/modules/marketplace/mock-data";
 import { getProductAvailability } from "@/modules/marketplace/availability";
@@ -161,9 +162,12 @@ const filteredBusinesses = businesses.filter((business) => {
                   {business.description}
                 </p>
 
-                <button className="mt-5 text-sm font-semibold">
-                  Ver negocio →
-                </button>
+                <Link
+  href={`/negocios/${business.id}`}
+  className="mt-5 inline-block text-sm font-semibold"
+>
+  Ver negocio →
+</Link>
               </article>
             ))}
           </div>
