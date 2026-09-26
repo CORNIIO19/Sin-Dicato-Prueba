@@ -72,9 +72,12 @@ const filteredBusinesses = businesses.filter((business) => {
              </p>
            </div>
 
-          <button className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
-            Quiero vender
-          </button>
+          <Link
+  href="/vender"
+  className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
+>
+  Quiero vender
+</Link>
         </div>
       </header>
 
