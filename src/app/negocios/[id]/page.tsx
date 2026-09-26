@@ -134,20 +134,29 @@ export default async function BusinessPage({
                       )}
                     </div>
 
-                    <a
-                      href={`https://wa.me/${business.whatsapp}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`mt-5 block w-full rounded-xl px-4 py-3 text-center text-sm font-semibold ${
-                        available
-                          ? "bg-zinc-900 text-white"
-                          : "pointer-events-none bg-zinc-200 text-zinc-500"
-                      }`}
-                    >
-                      {available
-                        ? "Contactar por WhatsApp"
-                        : "No disponible"}
-                    </a>
+                    <div className="mt-5 flex flex-col gap-2">
+  <Link
+    href={`/productos/${product.id}`}
+    className="block w-full rounded-xl border border-zinc-300 px-4 py-3 text-center text-sm font-semibold"
+  >
+    Ver producto
+  </Link>
+
+  {available ? (
+    <a
+      href={`https://wa.me/${business.whatsapp}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block w-full rounded-xl bg-zinc-900 px-4 py-3 text-center text-sm font-semibold text-white"
+    >
+      Contactar por WhatsApp
+    </a>
+  ) : (
+    <div className="w-full rounded-xl bg-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-500">
+      No disponible
+    </div>
+  )}
+</div>
                   </div>
                 </article>
               );

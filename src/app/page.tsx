@@ -238,12 +238,18 @@ const filteredBusinesses = businesses.filter((business) => {
                     </div>
                     </div>
 
-                    <button
-                      disabled={!available}
-                      className="mt-5 w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500"
-                    >
-                      {available ? "Ver producto" : "No disponible"}
-                    </button>
+                  {available ? (
+  <Link
+    href={`/productos/${product.id}`}
+    className="mt-5 block w-full rounded-xl bg-zinc-900 px-4 py-3 text-center text-sm font-semibold text-white"
+  >
+    Ver producto
+  </Link>
+) : (
+  <div className="mt-5 w-full rounded-xl bg-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-500">
+    No disponible
+  </div>
+)}
                   </div>
                 </article>
               );
