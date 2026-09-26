@@ -1,5 +1,9 @@
 export type ModerationStatus = "pending" | "approved" | "rejected";
-
+export type Category = {
+  id: string;
+  name: string;
+  slug: string;
+};
 export type Business = {
   id: string;
   name: string;

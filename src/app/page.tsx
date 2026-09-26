@@ -1,5 +1,6 @@
 import { businesses, products } from "@/modules/marketplace/mock-data";
 import { getProductAvailability } from "@/modules/marketplace/availability";
+import { categories } from "@/modules/marketplace/categories";
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -33,6 +34,22 @@ export default function Home() {
             placeholder="Buscar comida, servicios, ropa..."
             className="mt-6 w-full rounded-2xl border border-zinc-300 bg-white px-5 py-4 outline-none transition focus:border-zinc-500"
           />
+          <div className="mt-5 flex flex-wrap gap-2">
+  <button className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
+    Todos
+  </button>
+
+  {categories.map((category) => (
+    <button
+      key={category.id}
+      className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-400"
+    >
+      {category.name}
+    </button>
+  ))}
+</div>
+
+
         </section>
 
         <section className="mt-12">
