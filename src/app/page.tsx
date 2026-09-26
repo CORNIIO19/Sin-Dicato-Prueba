@@ -1,69 +1,182 @@
-import Image from "next/image";
+const businesses = [
+  {
+    id: 1,
+    name: "Dulce Campus",
+    description: "Postres y brownies hechos en casa.",
+    isOpen: true,
+  },
+  {
+    id: 2,
+    name: "Campus Café",
+    description: "Café, bebidas frías y snacks.",
+    isOpen: true,
+  },
+  {
+    id: 3,
+    name: "Diseño Estudiantil",
+    description: "Diseño gráfico para tareas y proyectos.",
+    isOpen: false,
+  },
+];
+
+const products = [
+  {
+    id: 1,
+    name: "Brownie clásico",
+    business: "Dulce Campus",
+    price: 45,
+    stock: 7,
+  },
+  {
+    id: 2,
+    name: "Cold Brew",
+    business: "Campus Café",
+    price: 55,
+    stock: 4,
+  },
+  {
+    id: 3,
+    name: "Galleta de chocolate",
+    business: "Dulce Campus",
+    price: 30,
+    stock: 0,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="min-h-screen bg-zinc-50 text-zinc-900">
+      <header className="border-b border-zinc-200 bg-white">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
+          <div>
+            <h1 className="text-xl font-bold">Market Universitario</h1>
+            <p className="text-sm text-zinc-500">
+              Compra y vende dentro de tu comunidad.
+            </p>
+          </div>
+
+          <button className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
+            Quiero vender
+          </button>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-6xl px-6 py-10">
+        <section>
+          <h2 className="text-3xl font-bold tracking-tight">
+            ¿Qué estás buscando?
+          </h2>
+
+          <p className="mt-2 text-zinc-600">
+            Descubre productos y servicios ofrecidos por estudiantes.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+          <input
+            type="search"
+            placeholder="Buscar comida, servicios, ropa..."
+            className="mt-6 w-full rounded-2xl border border-zinc-300 bg-white px-5 py-4 outline-none transition focus:border-zinc-500"
+          />
+        </section>
+
+        <section className="mt-12">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Negocios</h2>
+
+            <button className="text-sm font-medium text-zinc-600">
+              Ver todos
+            </button>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {businesses.map((business) => (
+              <article
+                key={business.id}
+                className="rounded-2xl border border-zinc-200 bg-white p-5"
+              >
+                <div className="mb-4 flex items-start justify-between gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-xl">
+                    🏪
+                  </div>
+
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      business.isOpen
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-zinc-100 text-zinc-500"
+                    }`}
+                  >
+                    {business.isOpen ? "● Abierto" : "Cerrado"}
+                  </span>
+                </div>
+
+                <h3 className="font-semibold">{business.name}</h3>
+
+                <p className="mt-1 text-sm leading-6 text-zinc-500">
+                  {business.description}
+                </p>
+
+                <button className="mt-5 text-sm font-semibold">
+                  Ver negocio →
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Productos recientes</h2>
+
+            <button className="text-sm font-medium text-zinc-600">
+              Ver todos
+            </button>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => {
+              const available = product.stock > 0;
+
+              return (
+                <article
+                  key={product.id}
+                  className="overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+                >
+                  <div className="flex aspect-[4/3] items-center justify-center bg-zinc-100 text-5xl">
+                    📦
+                  </div>
+
+                  <div className="p-5">
+                    <p className="text-sm text-zinc-500">{product.business}</p>
+
+                    <h3 className="mt-1 font-semibold">{product.name}</h3>
+
+                    <p className="mt-3 text-2xl font-bold">${product.price}</p>
+
+                    <div className="mt-4">
+                      {available ? (
+                        <span className="text-sm font-medium text-emerald-700">
+                          {product.stock} disponibles
+                        </span>
+                      ) : (
+                        <span className="text-sm font-medium text-zinc-500">
+                          Agotado
+                        </span>
+                      )}
+                    </div>
+
+                    <button
+                      disabled={!available}
+                      className="mt-5 w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-zinc-200 disabled:text-zinc-500"
+                    >
+                      {available ? "Ver producto" : "No disponible"}
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
