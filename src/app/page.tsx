@@ -49,11 +49,11 @@ export default function Home() {
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
           <div>
-            <h1 className="text-xl font-bold">Market Universitario</h1>
+            <h1 className="text-xl font-bold">Sin Dicato</h1>
             <p className="text-sm text-zinc-500">
-              Compra y vende dentro de tu comunidad.
-            </p>
-          </div>
+            Compra, vende y descubre lo que ofrece la comunidad UAM-C.
+             </p>
+           </div>
 
           <button className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
             Quiero vender
