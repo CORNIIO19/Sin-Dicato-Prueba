@@ -1,48 +1,4 @@
-const businesses = [
-  {
-    id: 1,
-    name: "Dulce Campus",
-    description: "Postres y brownies hechos en casa.",
-    isOpen: true,
-  },
-  {
-    id: 2,
-    name: "Campus Café",
-    description: "Café, bebidas frías y snacks.",
-    isOpen: true,
-  },
-  {
-    id: 3,
-    name: "Diseño Estudiantil",
-    description: "Diseño gráfico para tareas y proyectos.",
-    isOpen: false,
-  },
-];
-
-const products = [
-  {
-    id: 1,
-    name: "Brownie clásico",
-    business: "Dulce Campus",
-    price: 45,
-    stock: 7,
-  },
-  {
-    id: 2,
-    name: "Cold Brew",
-    business: "Campus Café",
-    price: 55,
-    stock: 4,
-  },
-  {
-    id: 3,
-    name: "Galleta de chocolate",
-    business: "Dulce Campus",
-    price: 30,
-    stock: 0,
-  },
-];
-
+import { businesses, products } from "@/modules/marketplace/mock-data";
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -134,7 +90,13 @@ export default function Home() {
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => {
-              const available = product.stock > 0;
+              const business = businesses.find(
+                (business) => business.id === product.businessId,
+                );
+
+               const available =
+               product.isAvailable &&
+               (!product.trackStock || (product.stockQuantity ?? 0) > 0);
 
               return (
                 <article
@@ -146,7 +108,7 @@ export default function Home() {
                   </div>
 
                   <div className="p-5">
-                    <p className="text-sm text-zinc-500">{product.business}</p>
+                    <p className="text-sm text-zinc-500">{business?.name ?? "Negocio"}</p>
 
                     <h3 className="mt-1 font-semibold">{product.name}</h3>
 
@@ -155,7 +117,7 @@ export default function Home() {
                     <div className="mt-4">
                       {available ? (
                         <span className="text-sm font-medium text-emerald-700">
-                          {product.stock} disponibles
+                          {product.stockQuantity} disponibles
                         </span>
                       ) : (
                         <span className="text-sm font-medium text-zinc-500">
