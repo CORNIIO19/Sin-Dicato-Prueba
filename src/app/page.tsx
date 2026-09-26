@@ -1,8 +1,66 @@
+"use client";
+import { useState } from "react";
 import { businesses, products } from "@/modules/marketplace/mock-data";
 import { getProductAvailability } from "@/modules/marketplace/availability";
 import { categories } from "@/modules/marketplace/categories";
+function normalizeText(text: string) {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
 export default function Home() {
-  return (
+const [selectedCategory, setSelectedCategory] = useState<string>("all");
+const [searchTerm, setSearchTerm] = useState("");
+const search = normalizeText(searchTerm);
+const filteredProducts = products.filter((product) => {
+  const business = businesses.find(
+    (business) => business.id === product.businessId,
+  );
+
+  const category = categories.find(
+    (category) => category.id === product.categoryId,
+  );
+
+  const matchesCategory =
+    selectedCategory === "all" ||
+    product.categoryId === selectedCategory;
+
+  const matchesSearch =
+    search === "" ||
+    normalizeText(product.name).includes(search) ||
+    normalizeText(product.description).includes(search) ||
+    normalizeText(business?.name ?? "").includes(search) ||
+    normalizeText(category?.name ?? "").includes(search);
+
+  return matchesCategory && matchesSearch;
+});
+
+const filteredBusinesses = businesses.filter((business) => {
+  const businessProducts = products.filter(
+    (product) => product.businessId === business.id,
+  );
+
+  const matchesCategory =
+    selectedCategory === "all" ||
+    businessProducts.some(
+      (product) => product.categoryId === selectedCategory,
+    );
+
+  const matchesSearch =
+    search === "" ||
+    normalizeText(business.name).includes(search) ||
+    normalizeText(business.description).includes(search) ||
+    businessProducts.some(
+      (product) =>
+        normalizeText(product.name).includes(search) ||
+        normalizeText(product.description).includes(search),
+    );
+
+  return matchesCategory && matchesSearch;
+});
+
+ return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
@@ -31,21 +89,35 @@ export default function Home() {
 
           <input
             type="search"
+            value={searchTerm}
+  onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Buscar comida, servicios, ropa..."
             className="mt-6 w-full rounded-2xl border border-zinc-300 bg-white px-5 py-4 outline-none transition focus:border-zinc-500"
           />
           <div className="mt-5 flex flex-wrap gap-2">
-  <button className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
-    Todos
-  </button>
+   <button
+  onClick={() => setSelectedCategory("all")}
+  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+    selectedCategory === "all"
+      ? "bg-zinc-900 text-white"
+      : "border border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400"
+  }`}
+>
+  Todos
+</button>
 
   {categories.map((category) => (
     <button
-      key={category.id}
-      className="rounded-full border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-400"
-    >
-      {category.name}
-    </button>
+  key={category.id}
+  onClick={() => setSelectedCategory(category.id)}
+  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+    selectedCategory === category.id
+      ? "bg-zinc-900 text-white"
+      : "border border-zinc-200 bg-white text-zinc-700 hover:border-zinc-400"
+  }`}
+>
+  {category.name}
+</button>
   ))}
 </div>
 
@@ -62,7 +134,7 @@ export default function Home() {
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {businesses.map((business) => (
+            {filteredBusinesses.map((business) => (
               <article
                 key={business.id}
                 className="rounded-2xl border border-zinc-200 bg-white p-5"
@@ -107,7 +179,7 @@ export default function Home() {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => {
+            {filteredProducts.map((product) => {
               const business = businesses.find(
                 (business) => business.id === product.businessId,
                   );
