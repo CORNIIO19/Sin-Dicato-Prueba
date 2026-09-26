@@ -64,4 +64,17 @@ export const products: Product[] = [
     isAvailable: true,
     moderationStatus: "approved",
   },
+  {
+  id: "product-4",
+  businessId: "business-3",
+  categoryId: "services",
+  name: "Diseño de presentación",
+  description: "Diseño visual para presentaciones escolares.",
+  price: 150,
+  trackStock: false,
+  stockQuantity: null,
+  isAvailable: true,
+  moderationStatus: "approved",
+},
+
 ];

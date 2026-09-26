@@ -1,4 +1,5 @@
 import { businesses, products } from "@/modules/marketplace/mock-data";
+import { getProductAvailability } from "@/modules/marketplace/availability";
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -92,11 +93,10 @@ export default function Home() {
             {products.map((product) => {
               const business = businesses.find(
                 (business) => business.id === product.businessId,
-                );
+                  );
 
-               const available =
-               product.isAvailable &&
-               (!product.trackStock || (product.stockQuantity ?? 0) > 0);
+                const availability = getProductAvailability(product, business);
+                const available = availability === "available";
 
               return (
                 <article
@@ -115,15 +115,34 @@ export default function Home() {
                     <p className="mt-3 text-2xl font-bold">${product.price}</p>
 
                     <div className="mt-4">
-                      {available ? (
-                        <span className="text-sm font-medium text-emerald-700">
-                          {product.stockQuantity} disponibles
-                        </span>
-                      ) : (
-                        <span className="text-sm font-medium text-zinc-500">
-                          Agotado
-                        </span>
-                      )}
+                      <div className="mt-4">
+  
+{availability === "available" && (
+    <span className="text-sm font-medium text-emerald-700">
+      {product.trackStock
+        ? `${product.stockQuantity} disponibles`
+        : "Disponible"}
+    </span>
+  )}
+
+  {availability === "sold_out" && (
+    <span className="text-sm font-medium text-zinc-500">
+      Agotado
+    </span>
+  )}
+
+  {availability === "business_closed" && (
+    <span className="text-sm font-medium text-zinc-500">
+      Negocio cerrado
+    </span>
+  )}
+
+  {availability === "unavailable" && (
+    <span className="text-sm font-medium text-zinc-500">
+      No disponible
+    </span>
+    )}
+                    </div>
                     </div>
 
                     <button
