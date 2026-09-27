@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { businesses, products } from "@/modules/marketplace/mock-data";
 import { getProductAvailability } from "@/modules/marketplace/availability";
+
+import { getPublicProductById } from "@/modules/marketplace/public-marketplace-repository";
+
+export const dynamic = "force-dynamic";
 
 type ProductPageProps = {
   params: Promise<{
@@ -15,33 +18,26 @@ export default async function ProductPage({
 }: ProductPageProps) {
   const { id } = await params;
 
-  const product = products.find(
-    (product) => product.id === id,
-  );
+  const product =
+    await getPublicProductById(id);
 
   if (!product) {
     notFound();
   }
 
-  const business = businesses.find(
-    (business) => business.id === product.businessId,
-  );
+  const availability =
+    getProductAvailability(
+      product,
+      product.business,
+    );
 
-  if (!business) {
-    notFound();
-  }
-
-  const availability = getProductAvailability(
-    product,
-    business,
-  );
-
-  const available = availability === "available";
+  const available =
+    availability === "available";
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
       <header className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto max-w-6xl px-6 py-5">
+        <div className="mx-auto max-w-4xl px-6 py-5">
           <Link
             href="/"
             className="text-sm font-medium text-zinc-600"
@@ -53,18 +49,21 @@ export default async function ProductPage({
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white">
-          
           <div className="flex aspect-[16/8] items-center justify-center bg-zinc-100 text-7xl">
             📦
           </div>
 
           <div className="p-6 sm:p-8">
             <Link
-              href={`/negocios/${business.id}`}
-              className="text-sm font-medium text-zinc-500 hover:text-zinc-900"
+              href={`/negocios/${product.business.id}`}
+              className="text-sm font-medium text-zinc-500"
             >
-              {business.name}
+              {product.business.name}
             </Link>
+
+            <p className="mt-2 text-sm text-zinc-500">
+              {product.category.name}
+            </p>
 
             <h1 className="mt-2 text-3xl font-bold">
               {product.name}
@@ -88,19 +87,21 @@ export default async function ProductPage({
               )}
 
               {availability === "sold_out" && (
-                <span className="text-sm font-medium text-zinc-500">
+                <span className="text-sm text-zinc-500">
                   Agotado
                 </span>
               )}
 
-              {availability === "business_closed" && (
-                <span className="text-sm font-medium text-zinc-500">
+              {availability ===
+                "business_closed" && (
+                <span className="text-sm text-zinc-500">
                   Negocio cerrado
                 </span>
               )}
 
-              {availability === "unavailable" && (
-                <span className="text-sm font-medium text-zinc-500">
+              {availability ===
+                "unavailable" && (
+                <span className="text-sm text-zinc-500">
                   No disponible
                 </span>
               )}
@@ -114,21 +115,21 @@ export default async function ProductPage({
               <div className="mt-2 flex items-center justify-between gap-4">
                 <div>
                   <Link
-                    href={`/negocios/${business.id}`}
+                    href={`/negocios/${product.business.id}`}
                     className="font-semibold"
                   >
-                    {business.name}
+                    {product.business.name}
                   </Link>
 
                   <p className="mt-1 text-sm text-zinc-500">
-                    {business.isOpen
+                    {product.business.isOpen
                       ? "● Abierto ahora"
                       : "Cerrado"}
                   </p>
                 </div>
 
                 <Link
-                  href={`/negocios/${business.id}`}
+                  href={`/negocios/${product.business.id}`}
                   className="text-sm font-medium"
                 >
                   Ver negocio →
@@ -136,20 +137,20 @@ export default async function ProductPage({
               </div>
             </div>
 
-            <a
-              href={`https://wa.me/${business.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`mt-8 block w-full rounded-xl px-4 py-4 text-center font-semibold ${
-                available
-                  ? "bg-zinc-900 text-white"
-                  : "pointer-events-none bg-zinc-200 text-zinc-500"
-              }`}
-            >
-              {available
-                ? "Contactar por WhatsApp"
-                : "No disponible"}
-            </a>
+            {available ? (
+              <a
+                href={`https://wa.me/${product.business.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 block w-full rounded-xl bg-zinc-900 px-4 py-4 text-center font-semibold text-white"
+              >
+                Contactar por WhatsApp
+              </a>
+            ) : (
+              <div className="mt-8 w-full rounded-xl bg-zinc-200 px-4 py-4 text-center font-semibold text-zinc-500">
+                No disponible
+              </div>
+            )}
           </div>
         </div>
       </div>

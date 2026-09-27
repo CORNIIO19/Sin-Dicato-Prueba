@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { businesses, products } from "@/modules/marketplace/mock-data";
 import { getProductAvailability } from "@/modules/marketplace/availability";
+
+import { getPublicBusinessById } from "@/modules/marketplace/public-marketplace-repository";
+
+export const dynamic = "force-dynamic";
 
 type BusinessPageProps = {
   params: Promise<{
@@ -15,17 +18,12 @@ export default async function BusinessPage({
 }: BusinessPageProps) {
   const { id } = await params;
 
-  const business = businesses.find(
-    (business) => business.id === id,
-  );
+  const business =
+    await getPublicBusinessById(id);
 
   if (!business) {
     notFound();
   }
-
-  const businessProducts = products.filter(
-    (product) => product.businessId === business.id,
-  );
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -64,7 +62,9 @@ export default async function BusinessPage({
                   : "bg-zinc-100 text-zinc-500"
               }`}
             >
-              {business.isOpen ? "● Abierto" : "Cerrado"}
+              {business.isOpen
+                ? "● Abierto"
+                : "Cerrado"}
             </span>
           </div>
         </section>
@@ -74,94 +74,113 @@ export default async function BusinessPage({
             Productos y servicios
           </h2>
 
-          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {businessProducts.map((product) => {
-              const availability = getProductAvailability(
-                product,
-                business,
-              );
+          {business.products.length === 0 ? (
+            <div className="mt-5 rounded-2xl border border-dashed border-zinc-300 bg-white p-8 text-center text-zinc-500">
+              Este negocio todavía no tiene productos
+              aprobados.
+            </div>
+          ) : (
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {business.products.map(
+                (product) => {
+                  const availability =
+                    getProductAvailability(
+                      product,
+                      business,
+                    );
 
-              const available =
-                availability === "available";
+                  const available =
+                    availability ===
+                    "available";
 
-              return (
-                <article
-                  key={product.id}
-                  className="overflow-hidden rounded-2xl border border-zinc-200 bg-white"
-                >
-                  <div className="flex aspect-[4/3] items-center justify-center bg-zinc-100 text-5xl">
-                    📦
-                  </div>
+                  return (
+                    <article
+                      key={product.id}
+                      className="overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+                    >
+                      <div className="flex aspect-[4/3] items-center justify-center bg-zinc-100 text-5xl">
+                        📦
+                      </div>
 
-                  <div className="p-5">
-                    <h3 className="font-semibold">
-                      {product.name}
-                    </h3>
+                      <div className="p-5">
+                        <h3 className="font-semibold">
+                          {product.name}
+                        </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-zinc-500">
-                      {product.description}
-                    </p>
+                        <p className="mt-2 text-sm text-zinc-500">
+                          {product.category.name}
+                        </p>
 
-                    <p className="mt-4 text-2xl font-bold">
-                      ${product.price}
-                    </p>
+                        <p className="mt-3 text-sm leading-6 text-zinc-600">
+                          {product.description}
+                        </p>
 
-                    <div className="mt-3">
-                      {availability === "available" && (
-                        <span className="text-sm font-medium text-emerald-700">
-                          {product.trackStock
-                            ? `${product.stockQuantity} disponibles`
-                            : "Disponible"}
-                        </span>
-                      )}
+                        <p className="mt-4 text-2xl font-bold">
+                          ${product.price}
+                        </p>
 
-                      {availability === "sold_out" && (
-                        <span className="text-sm text-zinc-500">
-                          Agotado
-                        </span>
-                      )}
+                        <div className="mt-3">
+                          {availability ===
+                            "available" && (
+                            <span className="text-sm font-medium text-emerald-700">
+                              {product.trackStock
+                                ? `${product.stockQuantity} disponibles`
+                                : "Disponible"}
+                            </span>
+                          )}
 
-                      {availability === "business_closed" && (
-                        <span className="text-sm text-zinc-500">
-                          Negocio cerrado
-                        </span>
-                      )}
+                          {availability ===
+                            "sold_out" && (
+                            <span className="text-sm text-zinc-500">
+                              Agotado
+                            </span>
+                          )}
 
-                      {availability === "unavailable" && (
-                        <span className="text-sm text-zinc-500">
-                          No disponible
-                        </span>
-                      )}
-                    </div>
+                          {availability ===
+                            "business_closed" && (
+                            <span className="text-sm text-zinc-500">
+                              Negocio cerrado
+                            </span>
+                          )}
 
-                    <div className="mt-5 flex flex-col gap-2">
-  <Link
-    href={`/productos/${product.id}`}
-    className="block w-full rounded-xl border border-zinc-300 px-4 py-3 text-center text-sm font-semibold"
-  >
-    Ver producto
-  </Link>
+                          {availability ===
+                            "unavailable" && (
+                            <span className="text-sm text-zinc-500">
+                              No disponible
+                            </span>
+                          )}
+                        </div>
 
-  {available ? (
-    <a
-      href={`https://wa.me/${business.whatsapp}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block w-full rounded-xl bg-zinc-900 px-4 py-3 text-center text-sm font-semibold text-white"
-    >
-      Contactar por WhatsApp
-    </a>
-  ) : (
-    <div className="w-full rounded-xl bg-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-500">
-      No disponible
-    </div>
-  )}
-</div>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+                        <div className="mt-5 flex flex-col gap-2">
+                          <Link
+                            href={`/productos/${product.id}`}
+                            className="rounded-xl border border-zinc-300 px-4 py-3 text-center text-sm font-semibold"
+                          >
+                            Ver producto
+                          </Link>
+
+                          {available ? (
+                            <a
+                              href={`https://wa.me/${business.whatsapp}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="rounded-xl bg-zinc-900 px-4 py-3 text-center text-sm font-semibold text-white"
+                            >
+                              Contactar por WhatsApp
+                            </a>
+                          ) : (
+                            <div className="rounded-xl bg-zinc-200 px-4 py-3 text-center text-sm font-semibold text-zinc-500">
+                              No disponible
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  );
+                },
+              )}
+            </div>
+          )}
         </section>
       </div>
     </main>
