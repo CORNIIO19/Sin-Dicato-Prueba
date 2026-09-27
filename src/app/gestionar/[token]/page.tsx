@@ -125,9 +125,12 @@ export default async function ManageBusinessPage({
               </p>
             </div>
 
-            <div className="rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white">
-              + Agregar producto
-            </div>
+            <Link
+  href={`/gestionar/${token}/productos/nuevo`}
+  className="rounded-xl bg-zinc-900 px-4 py-3 text-sm font-semibold text-white"
+>
+  + Agregar producto
+</Link>
           </div>
 
           {business.products.length === 0 ? (
