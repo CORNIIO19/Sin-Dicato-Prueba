@@ -1,3 +1,4 @@
+import ProductAvailabilityControl from "@/components/product-availability-control";
 import StockControls from "@/components/stock-controls";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -180,19 +181,11 @@ export default async function ManageBusinessPage({
     </p>
   )}
 
-  <div className="mt-4">
-    <span
-      className={`rounded-full px-3 py-1 text-xs font-medium ${
-        product.isAvailable
-          ? "bg-emerald-100 text-emerald-700"
-          : "bg-zinc-100 text-zinc-500"
-      }`}
-    >
-      {product.isAvailable
-        ? "● Activo"
-        : "Pausado"}
-    </span>
-  </div>
+  <ProductAvailabilityControl
+  token={token}
+  productId={product.id}
+  initialIsAvailable={product.isAvailable}
+/>
 
   <Link
     href={`/gestionar/${token}/productos/${product.id}/editar`}
