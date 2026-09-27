@@ -31,7 +31,7 @@ export const products: Product[] = [
   {
     id: "product-1",
     businessId: "business-1",
-    categoryId: "food",
+    categoryId: "comida-preparada",
     name: "Brownie clásico",
     description: "Brownie artesanal de chocolate.",
     price: 45,
@@ -43,7 +43,7 @@ export const products: Product[] = [
   {
     id: "product-2",
     businessId: "business-2",
-    categoryId: "drinks",
+    categoryId: "bebidas",
     name: "Cold Brew",
     description: "Café frío preparado al momento.",
     price: 55,
@@ -55,7 +55,7 @@ export const products: Product[] = [
   {
     id: "product-3",
     businessId: "business-1",
-    categoryId: "food",
+    categoryId: "snacks-dulces",
     name: "Galleta de chocolate",
     description: "Galleta casera con chispas de chocolate.",
     price: 30,
@@ -67,7 +67,7 @@ export const products: Product[] = [
   {
   id: "product-4",
   businessId: "business-3",
-  categoryId: "services",
+  categoryId: "servicios-digitales",
   name: "Diseño de presentación",
   description: "Diseño visual para presentaciones escolares.",
   price: 150,
