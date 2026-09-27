@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Business {
+  id                  String           @id @default(cuid())
+  name                String
+  description         String
+  whatsapp            String
+  isOpen              Boolean          @default(false)
+  moderationStatus    ModerationStatus @default(PENDING)
+  managementTokenHash String           @unique
+
+  products            Product[]
+
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  @@index([moderationStatus])
+  @@index([isOpen])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String    @unique
+
+  products  Product[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id               String           @id @default(cuid())
+
+  name             String
+  description      String
+  price            Decimal          @db.Decimal(10, 2)
+
+  trackStock       Boolean          @default(true)
+  stockQuantity    Int?
+  isAvailable      Boolean          @default(true)
+
+  moderationStatus ModerationStatus @default(PENDING)
+
+  businessId       String
+  business         Business         @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  categoryId       String
+  category         Category         @relation(fields: [categoryId], references: [id])
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([businessId])
+  @@index([categoryId])
+  @@index([moderationStatus])
+}
