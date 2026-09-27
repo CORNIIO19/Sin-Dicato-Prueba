@@ -1,3 +1,4 @@
+import { createWhatsAppProductLink } from "@/modules/marketplace/whatsapp";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -33,6 +34,12 @@ export default async function ProductPage({
 
   const available =
     availability === "available";
+  const whatsappLink = createWhatsAppProductLink({
+  whatsapp: product.business.whatsapp,
+  productName: product.name,
+  businessName: product.business.name,
+  price: product.price,
+});
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-900">
@@ -139,7 +146,7 @@ export default async function ProductPage({
 
             {available ? (
               <a
-                href={`https://wa.me/${product.business.whatsapp}`}
+                href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-8 block w-full rounded-xl bg-zinc-900 px-4 py-4 text-center font-semibold text-white"

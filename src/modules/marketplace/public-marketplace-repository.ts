@@ -1,3 +1,4 @@
+
 import { prisma } from "@/lib/prisma";
 
 export async function getPublicBusinesses() {
@@ -55,6 +56,7 @@ export async function getPublicProducts() {
 
   return products.map((product) => ({
     id: product.id,
+
     businessId: product.businessId,
     businessName: product.business.name,
 
@@ -70,4 +72,107 @@ export async function getPublicProducts() {
     stockQuantity: product.stockQuantity,
     isAvailable: product.isAvailable,
   }));
+}
+
+export async function getPublicBusinessById(
+  businessId: string,
+) {
+  const business = await prisma.business.findFirst({
+    where: {
+      id: businessId,
+      moderationStatus: "APPROVED",
+    },
+    include: {
+      products: {
+        where: {
+          moderationStatus: "APPROVED",
+        },
+        include: {
+          category: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
+  });
+
+  if (!business) {
+    return null;
+  }
+
+  return {
+    id: business.id,
+    name: business.name,
+    description: business.description,
+    whatsapp: business.whatsapp,
+    isOpen: business.isOpen,
+
+    products: business.products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: Number(product.price),
+
+      trackStock: product.trackStock,
+      stockQuantity: product.stockQuantity,
+      isAvailable: product.isAvailable,
+
+      category: {
+        id: product.category.id,
+        name: product.category.name,
+        slug: product.category.slug,
+      },
+    })),
+  };
+}
+
+export async function getPublicProductById(
+  productId: string,
+) {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: productId,
+      moderationStatus: "APPROVED",
+      business: {
+        moderationStatus: "APPROVED",
+      },
+    },
+    include: {
+      business: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          whatsapp: true,
+          isOpen: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
+
+  if (!product) {
+    return null;
+  }
+
+  return {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    price: Number(product.price),
+
+    trackStock: product.trackStock,
+    stockQuantity: product.stockQuantity,
+    isAvailable: product.isAvailable,
+
+    business: product.business,
+    category: product.category,
+  };
 }
