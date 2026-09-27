@@ -1,3 +1,4 @@
+import BusinessAvailabilityControl from "@/components/business-availability-control";
 import ProductAvailabilityControl from "@/components/product-availability-control";
 import StockControls from "@/components/stock-controls";
 import type { Metadata } from "next";
@@ -97,22 +98,16 @@ export default async function ManageBusinessPage({
           </div>
 
           <div className="mt-8 border-t border-zinc-200 pt-6">
-            <p className="text-sm text-zinc-500">
-              Estado del negocio
-            </p>
+  <p className="text-sm text-zinc-500">
+    Estado del negocio
+  </p>
 
-            <p className="mt-2 text-lg font-semibold">
-              {business.isOpen
-                ? "🟢 Abierto"
-                : "⚪ Cerrado"}
-            </p>
-
-            {!isApproved && (
-              <p className="mt-2 text-sm text-zinc-500">
-                Podrás abrir el negocio cuando haya sido aprobado.
-              </p>
-            )}
-          </div>
+  <BusinessAvailabilityControl
+    token={token}
+    initialIsOpen={business.isOpen}
+    isApproved={isApproved}
+  />
+</div>
         </section>
 
         <section className="mt-8">
