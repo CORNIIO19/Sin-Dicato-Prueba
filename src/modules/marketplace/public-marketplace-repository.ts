@@ -55,6 +55,7 @@ export async function getPublicProducts() {
   });
 
   return products.map((product) => ({
+       
     id: product.id,
 
     businessId: product.businessId,
@@ -63,6 +64,7 @@ export async function getPublicProducts() {
     name: product.name,
     description: product.description,
     price: Number(product.price),
+    imagePath: product.imagePath,
 
     categoryId: product.category.id,
     categoryName: product.category.name,
@@ -113,6 +115,7 @@ export async function getPublicBusinessById(
       name: product.name,
       description: product.description,
       price: Number(product.price),
+      imagePath: product.imagePath,
 
       trackStock: product.trackStock,
       stockQuantity: product.stockQuantity,
@@ -167,6 +170,7 @@ export async function getPublicProductById(
     name: product.name,
     description: product.description,
     price: Number(product.price),
+    imagePath: product.imagePath,
 
     trackStock: product.trackStock,
     stockQuantity: product.stockQuantity,

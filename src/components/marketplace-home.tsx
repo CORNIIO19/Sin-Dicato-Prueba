@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -24,6 +24,7 @@ type Product = {
 
   businessId: string;
   businessName: string;
+imagePath: string | null;
 
   name: string;
   description: string;
@@ -323,9 +324,21 @@ export default function MarketplaceHome({
                       key={product.id}
                       className="overflow-hidden rounded-2xl border border-zinc-200 bg-white"
                     >
-                      <div className="flex aspect-[4/3] items-center justify-center bg-zinc-100 text-5xl">
-                        📦
-                      </div>
+                      {product.imagePath ? (
+  <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100">
+    <Image
+      src={product.imagePath}
+      alt={product.name}
+      fill
+      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      className="object-cover"
+    />
+  </div>
+) : (
+  <div className="flex aspect-[4/3] items-center justify-center bg-zinc-100 text-5xl">
+    📦
+  </div>
+)}
 
                       <div className="p-5">
                         <p className="text-sm text-zinc-500">

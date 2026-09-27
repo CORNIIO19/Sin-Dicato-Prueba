@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { createWhatsAppProductLink } from "@/modules/marketplace/whatsapp";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -56,9 +57,22 @@ export default async function ProductPage({
 
       <div className="mx-auto max-w-4xl px-6 py-10">
         <div className="overflow-hidden rounded-3xl border border-zinc-200 bg-white">
-          <div className="flex aspect-[16/8] items-center justify-center bg-zinc-100 text-7xl">
-            📦
-          </div>
+          {product.imagePath ? (
+  <div className="relative aspect-[16/8] overflow-hidden bg-zinc-100">
+    <Image
+      src={product.imagePath}
+      alt={product.name}
+      fill
+      sizes="(max-width: 896px) 100vw, 896px"
+      className="object-cover"
+      priority
+    />
+  </div>
+) : (
+  <div className="flex aspect-[16/8] items-center justify-center bg-zinc-100 text-7xl">
+    📦
+  </div>
+)}
 
           <div className="p-6 sm:p-8">
             <Link

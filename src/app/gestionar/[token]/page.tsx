@@ -74,6 +74,12 @@ export default async function ManageBusinessPage({
               <p className="mt-4 text-sm text-zinc-500">
                 WhatsApp: {business.whatsapp}
               </p>
+<Link
+  href={`/gestionar/${token}/editar`}
+  className="mt-5 inline-block rounded-xl border border-zinc-300 px-4 py-2 text-sm font-semibold"
+>
+  Editar información
+</Link>
             </div>
 
             <div>

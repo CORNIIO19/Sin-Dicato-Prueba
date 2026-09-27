@@ -47,6 +47,7 @@ model Product {
 
   name             String
   description      String
+  imagePath String?
   price            Decimal          @db.Decimal(10, 2)
 
   trackStock       Boolean          @default(true)
