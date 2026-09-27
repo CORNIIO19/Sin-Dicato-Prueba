@@ -147,27 +147,35 @@ export default async function ManageBusinessPage({
           ) : (
             <div className="mt-5 space-y-3">
               {business.products.map((product) => (
-                <article
-                  key={product.id}
-                  className="rounded-2xl border border-zinc-200 bg-white p-5"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-semibold">
-                        {product.name}
-                      </p>
+  <article
+    key={product.id}
+    className="rounded-2xl border border-zinc-200 bg-white p-5"
+  >
+    <div className="flex items-start justify-between gap-4">
+      <div>
+        <p className="font-semibold">
+          {product.name}
+        </p>
 
-                      <p className="mt-1 text-sm text-zinc-500">
-                        {product.category.name}
-                      </p>
-                    </div>
+        <p className="mt-1 text-sm text-zinc-500">
+          {product.category.name}
+        </p>
+      </div>
 
-                    <p className="font-semibold">
-                      ${product.price.toString()}
-                    </p>
-                  </div>
-                </article>
-              ))}
+      <p className="font-semibold">
+        ${product.price.toString()}
+      </p>
+    </div>
+
+    <Link
+      href={`/gestionar/${token}/productos/${product.id}/editar`}
+      className="mt-4 inline-block rounded-lg border border-zinc-300 px-3 py-2 text-sm font-medium"
+    >
+      Editar
+    </Link>
+  </article>
+))}
+   
             </div>
           )}
         </section>
