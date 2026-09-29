@@ -3,16 +3,23 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+type ModerationStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED";
+
 type AdminModerationControlsProps = {
   type: "businesses" | "products";
   id: string;
   name: string;
+  currentStatus: ModerationStatus;
 };
 
 export default function AdminModerationControls({
   type,
   id,
   name,
+  currentStatus,
 }: AdminModerationControlsProps) {
   const router = useRouter();
 
@@ -33,7 +40,7 @@ export default function AdminModerationControls({
 
     if (moderationStatus === "REJECTED") {
       const confirmed = window.confirm(
-        `¿Seguro que quieres rechazar "${name}"?`,
+        `¿Seguro que quieres desactivar o rechazar "${name}"?`,
       );
 
       if (!confirmed) {
@@ -83,29 +90,37 @@ export default function AdminModerationControls({
   return (
     <div className="mt-5">
       <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          disabled={isUpdating}
-          onClick={() =>
-            updateModeration("APPROVED")
-          }
-          className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white disabled:bg-zinc-400"
-        >
-          {isUpdating
-            ? "Procesando..."
-            : "Aprobar"}
-        </button>
+        {currentStatus !== "APPROVED" && (
+          <button
+            type="button"
+            disabled={isUpdating}
+            onClick={() =>
+              updateModeration("APPROVED")
+            }
+            className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white disabled:bg-zinc-400"
+          >
+            {isUpdating
+              ? "Procesando..."
+              : currentStatus === "REJECTED"
+                ? "Volver a aprobar"
+                : "Aprobar"}
+          </button>
+        )}
 
-        <button
-          type="button"
-          disabled={isUpdating}
-          onClick={() =>
-            updateModeration("REJECTED")
-          }
-          className="rounded-xl border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 disabled:opacity-50"
-        >
-          Rechazar
-        </button>
+        {currentStatus !== "REJECTED" && (
+          <button
+            type="button"
+            disabled={isUpdating}
+            onClick={() =>
+              updateModeration("REJECTED")
+            }
+            className="rounded-xl border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 disabled:opacity-50"
+          >
+            {currentStatus === "APPROVED"
+              ? "Desactivar"
+              : "Rechazar"}
+          </button>
+        )}
       </div>
 
       {error && (

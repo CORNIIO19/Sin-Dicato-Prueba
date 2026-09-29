@@ -1,3 +1,4 @@
+import SellerModerationStatus from "@/components/seller-moderation-status";
 import BusinessAvailabilityControl from "@/components/business-availability-control";
 import ProductAvailabilityControl from "@/components/product-availability-control";
 import StockControls from "@/components/stock-controls";
@@ -83,23 +84,10 @@ export default async function ManageBusinessPage({
             </div>
 
             <div>
-              {business.moderationStatus === "PENDING" && (
-                <span className="rounded-full bg-amber-100 px-4 py-2 text-sm font-medium text-amber-700">
-                  Pendiente de aprobación
-                </span>
-              )}
-
-              {business.moderationStatus === "APPROVED" && (
-                <span className="rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700">
-                  Aprobado
-                </span>
-              )}
-
-              {business.moderationStatus === "REJECTED" && (
-                <span className="rounded-full bg-red-100 px-4 py-2 text-sm font-medium text-red-700">
-                  Rechazado
-                </span>
-              )}
+              <SellerModerationStatus
+  status={business.moderationStatus}
+  type="business"
+/>
             </div>
           </div>
 
@@ -168,6 +156,11 @@ export default async function ManageBusinessPage({
     <p className="font-semibold">
       ${product.price.toString()}
     </p>
+   <SellerModerationStatus
+  status={product.moderationStatus}
+  type="product"
+/>
+
   </div>
 
   {product.trackStock ? (

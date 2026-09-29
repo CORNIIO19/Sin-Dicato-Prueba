@@ -73,6 +73,7 @@ export default async function EditProductPage({
             trackStock: product.trackStock,
             stockQuantity: product.stockQuantity,
             isAvailable: product.isAvailable,
+            imagePath: product.imagePath,
           }}
         />
       </div>
