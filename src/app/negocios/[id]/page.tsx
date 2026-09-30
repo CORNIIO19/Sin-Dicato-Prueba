@@ -112,6 +112,7 @@ export default async function BusinessPage({
     <Image
       src={product.imagePath}
       alt={product.name}
+      unoptimized
       fill
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
       className="object-cover"

@@ -123,12 +123,14 @@ export async function POST(
       await image.arrayBuffer(),
     );
 
-    const uploadDirectory = path.join(
-      process.cwd(),
-      "public",
-      "uploads",
-      "products",
-    );
+    const uploadRoot =
+  process.env.UPLOAD_DIR ??
+  path.join(process.cwd(), "uploads");
+
+const uploadDirectory = path.join(
+  uploadRoot,
+  "products",
+);
 
     await mkdir(uploadDirectory, {
       recursive: true,
@@ -169,7 +171,7 @@ export async function POST(
     }
 
     const imagePath =
-      `/uploads/products/${filename}`;
+  `/media/products/${filename}`;
 
     const previousImagePath =
       product.imagePath;
@@ -184,25 +186,22 @@ export async function POST(
         },
       });
 
-    if (
-      previousImagePath &&
-      previousImagePath.startsWith(
-        "/uploads/products/",
-      )
-    ) {
-      const previousFile = path.join(
-        process.cwd(),
-        "public",
-        previousImagePath,
-      );
+     if (previousImagePath) {
+  const previousFilename =
+    path.basename(previousImagePath);
 
-      try {
-        await unlink(previousFile);
-      } catch {
-        // Si el archivo anterior ya no existe,
-        // no bloqueamos la actualización.
-      }
-    }
+  const previousFile = path.join(
+    uploadDirectory,
+    previousFilename,
+  );
+
+  try {
+    await unlink(previousFile);
+  } catch {
+    // Si el archivo anterior ya no existe,
+    // no bloqueamos la actualización.
+  }
+}
 
     return NextResponse.json({
       id: updatedProduct.id,

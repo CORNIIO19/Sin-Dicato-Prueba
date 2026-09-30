@@ -245,6 +245,7 @@ export default function EditProductForm({
             <Image
               src={product.imagePath}
               alt={product.name}
+              unoptimized
               fill
               sizes="384px"
               className="object-cover"
