@@ -17,6 +17,7 @@ const siteDescription =
   "Mercado digital comunitario para la UAMera. Compra, vende y descubre negocios, productos y servicios de la comunidad. SIN intermediarios. SIN complicaciones. SIN DICATO.";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sindicato.xibalbacore.cloud"),
   title: {
     default: siteTitle,
     template: `%s | ${siteTitle}`,

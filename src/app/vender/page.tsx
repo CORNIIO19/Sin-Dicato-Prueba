@@ -5,10 +5,12 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 
 import BrandLockup from "@/components/brand-lockup";
+import { createWhatsAppManagementLink } from "@/modules/marketplace/whatsapp";
 
 type CreatedBusiness = {
   id: string;
   name: string;
+  whatsapp: string;
   moderationStatus: string;
   managementToken: string;
 };
@@ -74,6 +76,17 @@ export default function SellPage() {
       }
 
       setCreatedBusiness(data);
+
+      if (typeof window !== "undefined") {
+        const url = `${window.location.origin}/gestionar/${data.managementToken}`;
+        const waUrl = createWhatsAppManagementLink({
+          whatsapp: data.whatsapp,
+          businessName: data.name,
+          managementUrl: url,
+        });
+
+        window.open(waUrl, "_blank");
+      }
     } catch (error) {
       setError(
         error instanceof Error
@@ -134,6 +147,20 @@ export default function SellPage() {
       );
     }
   }
+
+  const managementUrl =
+    typeof window !== "undefined" && createdBusiness
+      ? `${window.location.origin}/gestionar/${createdBusiness.managementToken}`
+      : "";
+
+  const whatsappUrl =
+    createdBusiness && managementUrl
+      ? createWhatsAppManagementLink({
+          whatsapp: createdBusiness.whatsapp,
+          businessName: createdBusiness.name,
+          managementUrl,
+        })
+      : "";
 
   return (
     <main className="min-h-screen bg-zinc-50 text-zinc-950">
@@ -257,7 +284,31 @@ export default function SellPage() {
               </p>
             </div>
 
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+            {/* ACCIÓN PRINCIPAL: WHATSAPP */}
+            <div className="mt-6">
+              {whatsappUrl && (
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-h-12 w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-600 px-5 py-3.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                >
+                  <svg
+                    className="h-5 w-5 fill-current"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.694.074-2.02-.476-1.579-.654-2.612-2.28-2.69-2.385-.078-.106-.633-.844-.633-1.611 0-.767.399-1.144.542-1.299.144-.156.314-.195.42-.195.105 0 .21.001.303.006.097.004.228-.037.356.271.132.318.452 1.103.492 1.185.04.082.067.177.013.283-.053.106-.079.172-.158.265-.079.092-.167.206-.239.277-.079.079-.161.164-.069.322.092.158.409.675.877 1.092.603.537 1.11.703 1.268.782.159.079.251.066.345-.04.093-.106.399-.464.505-.623.106-.159.212-.132.357-.079.146.053.927.437 1.086.517.159.079.265.119.305.185.04.066.04.384-.104.789zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.176L2 22l4.966-1.396A9.957 9.957 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.182c-1.636 0-3.155-.478-4.442-1.3l-.318-.203-2.951.829.832-2.887-.222-.338A8.141 8.141 0 013.818 12c0-4.511 3.671-8.182 8.182-8.182 4.511 0 8.182 3.671 8.182 8.182 0 4.511-3.671 8.182-8.182 8.182z" />
+                  </svg>
+                  Enviar liga a mi WhatsApp
+                </a>
+              )}
+
+              <p className="mt-2 text-center text-xs text-zinc-500">
+                Abre un chat con tu número para enviarte tu liga privada y guardarla de forma segura.
+              </p>
+            </div>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
               <button
                 type="button"
                 onClick={

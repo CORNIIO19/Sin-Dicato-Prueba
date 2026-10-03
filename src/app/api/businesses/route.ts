@@ -91,6 +91,7 @@ export async function POST(request: Request) {
       {
         id: business.id,
         name: business.name,
+        whatsapp: business.whatsapp,
         moderationStatus: business.moderationStatus,
         managementToken,
       },
